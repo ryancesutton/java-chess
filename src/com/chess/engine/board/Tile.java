@@ -3,6 +3,7 @@ package com.chess.engine.board;
 import com.chess.engine.pieces.Piece;
 import com.google.common.collect.ImmutableMap;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ public abstract class Tile {
 
     protected final int tileCoordinate;
 
-    private static final Map<Integer, EmptyTile> EMPTY_TILES = createAllPossibleEmptyTiles();
+    private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
     private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
 
@@ -20,6 +21,9 @@ public abstract class Tile {
             emptyTileMap.put(i, new EmptyTile(i));
         }
 
+        // JDK BUILT IN WAY OF MAKING THE MAP UNMODIFIABLE
+        // Collections.unmodifiableMap(emptyTileMap);
+
         // USING GUAVA LIBRARY TO MAKE THE MAP OF EMPTY CHESS TILES IMMUTABLE
         // CAN RETRIEVE ANY POTENTIAL TILE BY ITS KEY
         return ImmutableMap.copyOf(emptyTileMap);
@@ -28,7 +32,7 @@ public abstract class Tile {
 
 
     public static Tile createTile(final int tileCoordinate, final Piece piece) {
-        return piece != null ? new OccupiedTile(tileCoordinate, piece) : EMPTY_TILES.get(tileCoordinate);
+        return piece != null ? new OccupiedTile(tileCoordinate, piece) : EMPTY_TILES_CACHE.get(tileCoordinate);
     }
 
 
@@ -41,7 +45,7 @@ public abstract class Tile {
     public abstract Piece getPiece();
 
     public static final class EmptyTile extends Tile {
-        public EmptyTile(int coordinates) {
+        private EmptyTile(int coordinates) {
             super(coordinates);
         }
 
@@ -61,7 +65,7 @@ public abstract class Tile {
 
         private final Piece pieceOnTile;
 
-        public OccupiedTile(int tileCoordinate, Piece pieceOnTile) {
+        private OccupiedTile(int tileCoordinate, Piece pieceOnTile) {
             super(tileCoordinate);
             this.pieceOnTile = pieceOnTile;
         }
