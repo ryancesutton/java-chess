@@ -4,22 +4,23 @@ import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
+import com.chess.engine.board.Move.MajorMove;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Pawn extends Piece{
+public class Pawn extends Piece {
 
 
-    private final static int[] CANDIDATE_MOVE_COORDINATES = {8};
+    private final static int[] CANDIDATE_MOVE_COORDINATES = {8, 16};
 
-    Pawn(int piecePosition, Alliance pieceAlliance) {
+    Pawn(final int piecePosition, final Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 
     @Override
-    public Collection<Move> calculateLegalMoves(Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
 
         final List<Move> legalMoves = new ArrayList<>();
 
@@ -34,12 +35,24 @@ public class Pawn extends Piece{
             if (currentCandidateOffset == 8 && !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
 
                 // TODO: more work to do here!!
-                legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
+                legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
+            } else if (currentCandidateOffset == 16 && this.isFirstMove() &&
+                    (BoardUtils.SECOND_ROW[this.piecePosition] && this.pieceAlliance.isBlack()) ||
+                    (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.pieceAlliance.isWhite())) {
+
+                final int behindCandidateDestinationCoordinate = this.piecePosition + (this.pieceAlliance.getDirection() * 8);
+                if (!board.getTile(behindCandidateDestinationCoordinate).isTileOccupied() &&
+                        !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
+
+                    legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
+
+                }
+
             }
 
         }
 
 
-        return null;
+        return legalMoves;
     }
 }
