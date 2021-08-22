@@ -29,4 +29,8 @@ public abstract class Piece {
     public Alliance getPieceAlliance() {
         return this.pieceAlliance;
     }
+
+    public int getPiecePosition() {
+        return piecePosition;
+    }
 }
