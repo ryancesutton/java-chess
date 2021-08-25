@@ -29,6 +29,14 @@ public class Board {
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
     }
 
+    public WhitePlayer whitePlayer() {
+        return this.whitePlayer;
+    }
+
+    public BlackPlayer blackPlayer() {
+        return this.blackPlayer;
+    }
+
     public Collection<Piece> getBlackPieces() {
         return this.blackPieces;
     }
