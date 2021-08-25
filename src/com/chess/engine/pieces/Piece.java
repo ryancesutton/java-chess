@@ -32,6 +32,8 @@ public abstract class Piece {
 
     public abstract Collection<Move> calculateLegalMoves(final Board board);
 
+    public abstract Piece movePiece(Move move);
+
     public Alliance getPieceAlliance() {
         return this.pieceAlliance;
     }
