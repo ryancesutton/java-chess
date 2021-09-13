@@ -201,6 +201,9 @@ public abstract class Move {
         }
     }
 
+
+
+
     static abstract class CastleMove extends Move {
         public CastleMove(final Board board,
                           final Piece movedPiece,
