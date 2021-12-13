@@ -3,6 +3,8 @@ package com.chess.engine.player;
 import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
+import com.chess.engine.board.Move.KingSideCastleMove;
+import com.chess.engine.board.Move.QueenSideCastleMove;
 import com.chess.engine.board.Tile;
 import com.chess.engine.pieces.Piece;
 import com.chess.engine.pieces.Rook;
@@ -47,8 +49,12 @@ public class WhitePlayer extends Player{
                     if (Player.calculateAttacksOnTile(61, opponentsLegals).isEmpty() &&
                             Player.calculateAttacksOnTile(62, opponentsLegals).isEmpty() &&
                             rookTile.getPiece().getPieceType().isRook()) {
-                        //TODO: ADD CASTLE MOVE
-                        kingCastles.add(null);
+                        kingCastles.add(new KingSideCastleMove(this.board,
+                                                               this.playerKing,
+                                             62,
+                                                               (Rook)rookTile.getPiece(),
+                                                               rookTile.getTileCoordinate(),
+                                             61));
                     }
 
                 }
@@ -59,12 +65,15 @@ public class WhitePlayer extends Player{
                 final Tile rookTile = this.board.getTile(56);
                 if (rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove()) {
                     //TODO: ADD CASTLE MOVE
-                    kingCastles.add(null);
+                    kingCastles.add(new QueenSideCastleMove(this.board,
+                                                            this.playerKing,
+                                          58,
+                                                            (Rook)rookTile.getPiece(),
+                                                            rookTile.getTileCoordinate(),
+                                          59));
                 }
             }
         }
         return ImmutableList.copyOf(kingCastles);
     }
-
-
 }
