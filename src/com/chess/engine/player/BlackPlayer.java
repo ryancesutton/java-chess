@@ -49,7 +49,6 @@ public class BlackPlayer extends Player{
                     if (Player.calculateAttacksOnTile(5, opponentsLegals).isEmpty() &&
                             Player.calculateAttacksOnTile(6, opponentsLegals).isEmpty() &&
                             rookTile.getPiece().getPieceType().isRook()) {
-                        //TODO: ADD CASTLE MOVE
                         kingCastles.add(new KingSideCastleMove(this.board,
                                                                this.playerKing,
                                              6,
@@ -60,12 +59,14 @@ public class BlackPlayer extends Player{
 
                 }
             }
-            if (this.board.getTile(1).isTileOccupied() &&
+            if (!this.board.getTile(1).isTileOccupied() &&
                     !this.board.getTile(2).isTileOccupied() &&
                     !this.board.getTile(3).isTileOccupied()) {
                 final Tile rookTile = this.board.getTile(0);
-                if (rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove()) {
-                    //TODO: ADD CASTLE MOVE
+                if (rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove() &&
+                    Player.calculateAttacksOnTile(2, opponentsLegals).isEmpty() &&
+                    Player.calculateAttacksOnTile(3, opponentsLegals).isEmpty() &&
+                    rookTile.getPiece().getPieceType().isRook()) {
                     kingCastles.add(new QueenSideCastleMove(this.board,
                                                             this.playerKing,
                                           2,
