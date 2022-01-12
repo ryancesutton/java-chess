@@ -7,9 +7,10 @@ import com.chess.engine.pieces.Rook;
 
 public abstract class Move {
 
-    final Board board;
-    final Piece pieceMoved;
-    final int destinationCoordinate;
+    protected final Board board;
+    protected final Piece pieceMoved;
+    protected final int destinationCoordinate;
+    protected final boolean isFirstMove;
 
     public static final Move NULL_MOVE = new NullMove();
 
@@ -19,6 +20,15 @@ public abstract class Move {
         this.board = board;
         this.pieceMoved = pieceMoved;
         this.destinationCoordinate = destinationCoordinate;
+        this.isFirstMove = pieceMoved.isFirstMove();
+    }
+
+    public Move(Board board, int destinationCoordinate) {
+        this.board = board;
+        this.destinationCoordinate = destinationCoordinate;
+        this.pieceMoved = null;
+        this.isFirstMove = false;
+
     }
 
     @Override
@@ -28,6 +38,7 @@ public abstract class Move {
 
         result = prime * result + this.destinationCoordinate;
         result = prime * result + this.pieceMoved.hashCode();
+        result = prime * result + this.pieceMoved.getPiecePosition();
 
         return result;
     }
@@ -43,7 +54,8 @@ public abstract class Move {
         }
 
         final Move otherMove = (Move) other;
-        return getDestinationCoordinate() == otherMove.getDestinationCoordinate() &&
+        return getCurrentCoordinate() == otherMove.getCurrentCoordinate() &&
+               getDestinationCoordinate() == otherMove.getDestinationCoordinate() &&
                getPieceMoved().equals(otherMove.getPieceMoved());
     }
 
@@ -94,6 +106,16 @@ public abstract class Move {
                   final Piece movedPiece,
                   final int destinationCoordinate) {
             super(board, movedPiece, destinationCoordinate);
+        }
+
+        @Override
+        public boolean equals(final Object other) {
+            return this == other || other instanceof MajorMove && super.equals(other);
+        }
+
+        @Override
+        public String toString() {
+            return pieceMoved.getPieceType().toString() + BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
         }
 
     }
